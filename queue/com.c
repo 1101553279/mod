@@ -7,7 +7,7 @@
 /* for cache alloc */
 static un_t com_cache[ CACHE_SIZE ];
 
-static void *com_cache_alloc( u16_t size )
+static void *cache_alloc( u16_t size )
 {
     return com_cache;
 }
@@ -25,7 +25,7 @@ s8_t com_init( com_t *com )
     com->front = 0;
     com->rear = 0;
 //    com->frame = 0;
-    cache = com_cache_alloc( CACHE_SIZE );
+    cache = cache_alloc( CACHE_SIZE );
     if( 0 != cache )
     {
         com->size = CACHE_SIZE;
@@ -225,39 +225,39 @@ void com_print( com_t *com )
     if( 0 == com )
         return ;
     
-    out( "summary: size = %u, used = %u, space = %u, full = %s, empty = %s, ",
+    dout( "summary: size = %u, used = %u, space = %u, full = %s, empty = %s, ",
                     com_size(com), com_used(com), com_space(com), 
                     ( 0 == com_isfull(com)) ? "no": "yes",
                     ( 0 == com_isempty(com) ? "no": "yes") );
-    out( "rear = %u, front = %u\n", com->rear, com->front ); 
+    dout( "rear = %u, front = %u\n", com->rear, com->front ); 
    
 #if 1    
     for( i=0; i < com->size; i++ )
-        out( "%02d ", i );
-    out( "\n" );
+        dout( "%02d ", i );
+    dout( "\n" );
 #endif
     for( i=0; i < com->size; i++ )
     {
-        out( "%-2c ", ( 1 ==  com_in( com, i ) ) ? '*': '-');
+        dout( "%-2c ", ( 1 ==  com_in( com, i ) ) ? '*': '-');
         if((i+1) % 30 == 0 )       // 30 unit put newline
-            out("\n" );
+            dout("\n" );
 #if 0
         if( com_in( com, i ) )
-            out( "* " );
+            dout( "* " );
         else
-            out( "- " );
+            dout( "- " );
 #endif
     }
     
-//    out("debug! com->size = %d\n", com->size );
+//    dout("debug! com->size = %d\n", com->size );
 #if 1    
-    out( "\n" );
+    dout( "\n" );
     for( i=0; i < com->size; i++ )
-        out( "%02x ", com->cache[i] );
-    out( "\n" );
+        dout( "%02x ", com->cache[i] );
+    dout( "\n" );
 #endif
 
-    out( "\n\n" );
+    dout( "\n\n" );
 
     return;
 }

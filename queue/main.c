@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include "led.h"
 #include "com.h"
 #include "frame.h"
 #include "debug.h"
@@ -37,10 +36,10 @@ int main( void )
 #endif
                     };
 #if 1 
-    out( ">> frame init & put two frames \n" );
+    dout( ">> frame init & put two frames \n" );
     ret = frame_init( &frame, 0x02, 0x03, 0x41, 0 );
     if( 0 != ret )
-        out( "frame_init fault!\n" );
+        dout( "frame_init fault!\n" );
 
     frame_match_set( &frame, frame_match );
 
@@ -48,13 +47,13 @@ int main( void )
     {
         ret = frame_put_one( &frame, store[i] );
         if( 0 != ret )
-            out( "frame put one fail!: i = %d, data = %#x\n", i, store[i] );
+            dout( "frame put one fail!: i = %d, data = %#x\n", i, store[i] );
     }
     
     frame_print( &frame ); 
     
 //    ret = frame_frame( &frame ); 
-//    out( "frame frame = %d\n", ret );
+//    dout( "frame frame = %d\n", ret );
 
     for( i = 0; i < 2; i++ )
     {
@@ -62,23 +61,23 @@ int main( void )
 //        len = frame_match_get( &frame, buff, sizeof(buff) ); 
         if( 0 != len )
         {
-            out( "frame get success!: i = %d, len = %d : ", i, len );
+            dout( "frame get success!: i = %d, len = %d : ", i, len );
                 debug_dump( buff, len, print_hex ); 
         }
         else
-            out( "frame get fail!: i = %d, len = %d \n", i, len );
+            dout( "frame get fail!: i = %d, len = %d \n", i, len );
     }
 
 //    ret = frame_frame( &frame ); 
-//    out( "frame frame = %d\n", ret );
+//    dout( "frame frame = %d\n", ret );
 
-    out( "\n" );
+    dout( "\n" );
     frame_print( &frame );
 
-    out( ">> frame query !\n" );
+    dout( ">> frame query !\n" );
     frame_query( &frame, &query );
     frame_print( &query );
-    out( "\n" );
+    dout( "\n" );
 
 #endif
 
@@ -88,125 +87,125 @@ int main( void )
     com_push( &com, 0 );
 
     if( com_in( &com, 0 ) )
-        out( "0 in com \n" );
+        dout( "0 in com \n" );
     else
-        out( "0 not in com \n" );
+        dout( "0 not in com \n" );
 #endif 
-    out( ">>. com start\n" );
+    dout( ">>. com start\n" );
     com_print( &com );
 
-    out( ">>. com push 11 units\n" );
+    dout( ">>. com push 11 units\n" );
     for( i = 0; i < 11; i++ )
     {
         ret = com_push( &com, i );
         if( 0 != ret )
-           out( "push error: ret = %d, i = %d\n", ret, i ); 
+           dout( "push error: ret = %d, i = %d\n", ret, i ); 
     }
 
     com_print( &com );
     
-    out( ">>. com pop 4 units\n" );
+    dout( ">>. com pop 4 units\n" );
     for( i = 0; i < 4; i++ )
     {
         ret = com_pop( &com, &da );
         if( 0 != ret )
-            out( "pop error: ret = %d, i = %d\n", ret, i );
+            dout( "pop error: ret = %d, i = %d\n", ret, i );
         else
-            out( "%d pop %d\n", i, da );
+            dout( "%d pop %d\n", i, da );
     }
 
     com_print( &com );
 
-    out( ">>. com push 3 units\n" );
+    dout( ">>. com push 3 units\n" );
     for( i = 0; i < 3; i++ )
     {
         ret = com_push( &com, i );
         if( 0 != ret )
-           out( "push error: ret = %d, i = %d\n", ret, i ); 
+           dout( "push error: ret = %d, i = %d\n", ret, i ); 
     }
 
     com_print( &com);
     
-    out( ">>. com push 1 unit\n" );
+    dout( ">>. com push 1 unit\n" );
     ret = com_push( &com, i );
     if( 0 != ret )
-        out( "push error: ret = %d, i = %d\n", ret , i );
+        dout( "push error: ret = %d, i = %d\n", ret , i );
     
     com_print( &com );
  
-    out( ">>. com push 1 unit\n" );
+    dout( ">>. com push 1 unit\n" );
     i++; 
     ret = com_push( &com, i );
     if( 0 != ret )
-        out( "push error: ret = %d, i = %d\n", ret , i );
+        dout( "push error: ret = %d, i = %d\n", ret , i );
     com_print( &com );
 
-    out( ">>. com pop 5 units!\n" );
+    dout( ">>. com pop 5 units!\n" );
     for( i = 0; i < 5; i++ )
     {
         ret = com_pop( &com, &da );
         if( 0 != ret )
-            out( "pop error: ret = %d, i = %d\n", ret, i );
+            dout( "pop error: ret = %d, i = %d\n", ret, i );
         else
-            out( "%d pop %d\n", i, da );
+            dout( "%d pop %d\n", i, da );
     }
    
     com_print( &com ); 
-    out( ">>. com push rear 6 unit\n" );
+    dout( ">>. com push rear 6 unit\n" );
     for( i = 0; i < 6; i++ )
     {
         ret = com_push_rear( &com, i );
         if( 0 != ret )
-            out( "push error: ret = %d, i = %d\n", ret , i );
+            dout( "push error: ret = %d, i = %d\n", ret , i );
     }
     com_print( &com );
    
-    out( ">> com reset !\n" ); 
+    dout( ">> com reset !\n" ); 
     com_reset( &com );
     com_print( &com);
 
-    out( ">> com push rear 6 unit !\n" );
+    dout( ">> com push rear 6 unit !\n" );
     for( i = 0; i < 6; i++ )
     {
         ret = com_push_rear( &com, i );
         if( 0 != ret )
-            out( "push error: ret = %d, i = %d\n", ret , i );
+            dout( "push error: ret = %d, i = %d\n", ret , i );
     }
     com_print( &com );
     
-    out( ">> com find !\n" );
+    dout( ">> com find !\n" );
     for( i = 0; i < 7; i++ )
     {
         index = com_find( &com, i ); 
         if( index >= 0 )
-            out( "find %d, find %d\n", i, index);
+            dout( "find %d, find %d\n", i, index);
         else 
-            out( "find %d, no find!\n", i );
+            dout( "find %d, no find!\n", i );
     }
     
-    out( ">> com push & pop 7 units!\n" ); 
+    dout( ">> com push & pop 7 units!\n" ); 
     for( i = 0; i < 7; i++ )
     {
         ret = com_push( &com, i );
         if( 0 != ret )
-            out ( "push err: ret = %d, i = %d\n" , ret, i );
+            dout ( "push err: ret = %d, i = %d\n" , ret, i );
 
         ret = com_pop( &com, &da );
         if( 0 != ret )
-            out( "pop err: ret = %d, i = %d\n", ret, i );
+            dout( "pop err: ret = %d, i = %d\n", ret, i );
         else
-            out( "pop unit: i = %d, am = %x\n", i, da );
+            dout( "pop unit: i = %d, am = %x\n", i, da );
     }
     com_print( &com ); 
 
-    out( ">> com len!\n" );
+    dout( ">> com len!\n" );
     for( i = 0; i < 8; i++ )
     {
         len = com_len( &com, i );
         if( len != 0 )
-            out( "index %d, len = %d\n", i, len );
+            dout( "index %d, len = %d\n", i, len );
         else
-            out( "index %d, no in range!\n", i );
+            dout( "index %d, no in range!\n", i );
     }
 
 #endif

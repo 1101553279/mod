@@ -15,7 +15,7 @@ s8_t frame_init( frame_t *fm, un_t head, un_t tail, un_t addr, match_t match )
     fm->frame = 0;
     fm->match = match;
 
-//    out( "head: %#x, tail: %#x, addr: %#x, state: %d, frame = %d, match: %#x \r\n",
+//    dout( "head: %#x, tail: %#x, addr: %#x, state: %d, frame = %d, match: %#x \r\n",
 //         fm->head, fm->tail, fm->addr, fm->state, fm->frame, fm->match );
     return com_init( &fm->com ); 
 }
@@ -93,7 +93,7 @@ u16_t frame_get( frame_t *fm, un_t *buff, u16_t blen )
     if( 0 != ret )                      //pop error!
         return 0;
    
-//    out( "debug!\n" );
+//    dout( "debug!\n" );
     index = com_find( com, fm->tail ); 
     if( index < 0 || (com_used(com ) < com_len(com, index)+2) )     //check find tail unit && used >= frame+2
     {
@@ -200,14 +200,14 @@ void frame_print( frame_t *fm )
     if( 0 == fm )
         return ;
     
-    out( "head: %#x, tail: %#x, addr: %#x, state: %d, frame = %d, match: %#x \r\n",
+    dout( "head: %#x, tail: %#x, addr: %#x, state: %d, frame = %d, match: %#x \r\n",
           fm->head, fm->tail, fm->addr, fm->state, fm->frame, fm->match );
     
-    out( "\n" );
+    dout( "\n" );
 
     com_print( &fm->com );
 
-    out( "\n" );
+    dout( "\n" );
 
     return;
 }

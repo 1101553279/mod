@@ -1,6 +1,6 @@
 #ifndef __COM_H__
 #define __COM_H__
-#include "ty.h"
+#include "btype.h"
 
 /* define cache data type */
 typedef u8_t un_t;
