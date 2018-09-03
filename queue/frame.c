@@ -11,7 +11,7 @@ s8_t frame_init( frame_t *fm, un_t head, un_t tail, un_t addr, match_t match )
     fm->head = head;
     fm->tail = tail;
     fm->addr = addr;
-    fm->state = 0;
+//    fm->state = 0;
     fm->frame = 0;
     fm->match = match;
 
@@ -26,7 +26,7 @@ void frame_clear( frame_t *fm )
     if( 0 == fm )
         return;
     
-    fm->state = 0;          // clear state
+//    fm->state = 0;          // clear state
     fm->frame = 0;          // clear frame number
     com_clear( &fm->com );  // clear com cache data
 
@@ -47,6 +47,10 @@ s8_t frame_put_one( frame_t *fm, un_t da )
          return -2;
      }
 
+#if 1
+     if( da == fm->tail )
+         fm->frame++;
+#else
 // for frame handle , spical handle, because data foramt: ...| tail | crc1 | crc2 |
      if( (0 == fm->state && fm->head == da) ||
          (1 == fm->state && fm->tail == da) ||
@@ -59,7 +63,7 @@ s8_t frame_put_one( frame_t *fm, un_t da )
          fm->state = 0;
          fm->frame++;
      }
-
+#endif
      return 0;
 }
 
@@ -92,14 +96,44 @@ u16_t frame_get( frame_t *fm, un_t *buff, u16_t blen )
 
     if( 0 != ret )                      //pop error!
         return 0;
-   
-//    dout( "debug!\n" );
+  
+#if 1 
+    index = com_find( com, fm->tail ); 
+    if( index < 0 )                     // no find tail unit
+    {
+        com_push_rear( com, am );       // put head unit back
+        return 0;
+    }
+
+
+    *(buff + len++) = am;               // store head unit 
+    ret = com_pop( com, &am );
+    while( 0 == ret && fm->tail != am )
+    {
+        if( len < blen )
+            *(buff + len++) = am;
+
+        ret = com_pop( com, &am );
+    }
+    
+    if( 0 != ret )                      // exception exit
+        return 0;
+    
+    if( len < blen )                    // store tail unit
+        *(buff + len++) = am;
+
+    if( fm->frame > 0 ) 
+        fm->frame--;                    // decremenet one frame
+
+    return len;
+#else
     index = com_find( com, fm->tail ); 
     if( index < 0 || (com_used(com ) < com_len(com, index)+2) )     //check find tail unit && used >= frame+2
     {
         com_push_rear( com, am );           // put head unit back
         return 0;
     }
+
 
     *(buff + len++) = am;  
     ret = com_pop( com, &am );
@@ -129,6 +163,7 @@ u16_t frame_get( frame_t *fm, un_t *buff, u16_t blen )
     }
 
     return len;
+#endif
 }
 
 /* get frame from com cache according to match function */
@@ -180,7 +215,7 @@ s8_t frame_query( frame_t *fm, frame_t *info )
     info->head = fm->head;
     info->tail = fm->tail;
     info->addr = fm->addr;
-    info->state = fm->state;
+//    info->state = fm->state;
     info->frame = fm->frame;
     info->match = fm->match;
 
@@ -199,10 +234,13 @@ void frame_print( frame_t *fm )
 
     if( 0 == fm )
         return ;
-    
+#if 1    
+    dout( "head: %#x, tail: %#x, addr: %#x, frame = %d, match: %#x \r\n",
+          fm->head, fm->tail, fm->addr, fm->frame, fm->match );
+#else 
     dout( "head: %#x, tail: %#x, addr: %#x, state: %d, frame = %d, match: %#x \r\n",
           fm->head, fm->tail, fm->addr, fm->state, fm->frame, fm->match );
-    
+#endif
     dout( "\n" );
 
     com_print( &fm->com );

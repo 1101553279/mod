@@ -25,9 +25,9 @@ int main( void )
     un_t store[ ] = { 
                     0x02,0x42,0x35,0x03,0x38,0x3a,
                     0x02,0x42,0x37,0x03,0x38,0x38,
+                    0x02,0x2,0x42,0x37,0x38,0x3,
+                    0x02,0x2,0x42,0x37,0x3,0x39,
 #if 0
-                    0x02,0x2,0x42,0x37,0x38,0x38,
-                    0x02,0x2,0x42,0x37,0x39,0x39,
                     0x02,0x41,0x36,0x03,0x38,0x39,
                     0x02,0x42,0x36,0x03,0x38,0x39,
                     0x02,0x41,0x31,0x30,0x30,0x30,0x30,0x30,0x30,0x30,0x30,0x30,0x33,0x32,0x03,0x30,0x30, 
@@ -54,8 +54,8 @@ int main( void )
     
 //    ret = frame_frame( &frame ); 
 //    dout( "frame frame = %d\n", ret );
-
-    for( i = 0; i < 2; i++ )
+    dout( ">> get 4 frame!\n" );
+    for( i = 0; i < 4; i++ )
     {
         len = frame_get( &frame, buff, sizeof(buff) ); 
 //        len = frame_match_get( &frame, buff, sizeof(buff) ); 
@@ -66,13 +66,15 @@ int main( void )
         }
         else
             dout( "frame get fail!: i = %d, len = %d \n", i, len );
+
+        frame_print( &frame );
     }
 
 //    ret = frame_frame( &frame ); 
 //    dout( "frame frame = %d\n", ret );
 
-    dout( "\n" );
-    frame_print( &frame );
+//    dout( "\n" );
+//    frame_print( &frame );
 
     dout( ">> frame query !\n" );
     frame_query( &frame, &query );

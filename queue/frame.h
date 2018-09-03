@@ -10,7 +10,7 @@ typedef struct frame{
     un_t head;      // head frame byte
     un_t tail;      // tail frame byte
     un_t addr;      // match value
-    u8_t state;     // for frame state
+//    u8_t state;     // for frame state
     u16_t frame;    // record frame number
     match_t match;  // match function
     com_t com;      // data cache
