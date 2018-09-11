@@ -1,5 +1,5 @@
-#ifndef __TY_H__
-#define __TY_H__
+#ifndef __BTYPE_H__
+#define __BTYPE_H__
 
 
 typedef unsigned char u8_t;
