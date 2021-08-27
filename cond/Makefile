@@ -1,4 +1,4 @@
-SRCS := avl.c main.c
+SRCS := cond.c
 APP :=$(patsubst %.c,%,$(firstword $(SRCS)))
 OBJS := $(SRCS:.c=.o)
 DEPS := $(SRCS:.c=.dep)
