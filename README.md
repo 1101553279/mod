@@ -1,3 +1,9 @@
+
 ###### avl
-###### cond
-###### sem
+
+###### linux
+####### cond
+####### sem
+
+###### bst
+    bst - binary search tree
